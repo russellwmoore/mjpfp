@@ -58078,7 +58078,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _components_CalendarView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/CalendarView */ "./src/app/components/CalendarView.js");
 /* harmony import */ var _redux_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../redux/actions */ "./src/redux/actions.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _components_NavBar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/NavBar */ "./src/app/components/NavBar.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
 
 
 
@@ -58102,7 +58104,7 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     if (date) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "app"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_CalendarView__WEBPACK_IMPORTED_MODULE_3__["default"], null));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NavBar__WEBPACK_IMPORTED_MODULE_5__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_CalendarView__WEBPACK_IMPORTED_MODULE_3__["default"], null));
     } else {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "app"
@@ -58125,7 +58127,7 @@ const mapDispatchToProps = {
   setDate: date => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_4__["setDate"])(date),
   setTasks: taskList => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_4__["setTasks"])(taskList)
 };
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(mapStateToProps, mapDispatchToProps)(App));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProps, mapDispatchToProps)(App));
 
 /***/ }),
 
@@ -58305,6 +58307,54 @@ const mapDispatchToProps = {
 
 /***/ }),
 
+/***/ "./src/app/components/NavBar.js":
+/*!**************************************!*\
+  !*** ./src/app/components/NavBar.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _redux_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../redux/actions */ "./src/redux/actions.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+
+
+
+
+
+class NavBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  render() {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "navbar"
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, moment__WEBPACK_IMPORTED_MODULE_1___default()(this.props.date).format("MMMM YYYY")));
+  }
+
+}
+
+function mapStateToProps(state) {
+  const {
+    calendar
+  } = state;
+  return {
+    date: calendar.date
+  };
+}
+
+const mapDispatchToProps = {
+  setDate: date => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_3__["setDate"])(date)
+};
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["connect"])(mapStateToProps, mapDispatchToProps)(NavBar));
+
+/***/ }),
+
 /***/ "./src/app/components/TaskBlock.js":
 /*!*****************************************!*\
   !*** ./src/app/components/TaskBlock.js ***!
@@ -58368,9 +58418,11 @@ class TaskBlock extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "taskblock"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      onClick: ev => this.handleSooner(ev)
+      onClick: ev => this.handleSooner(ev),
+      disabled: task.complete
     }, `<`), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      onClick: ev => this.handleLater(ev)
+      onClick: ev => this.handleLater(ev),
+      disabled: task.complete
     }, `>`), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
       type: "checkbox",
       name: "complete",

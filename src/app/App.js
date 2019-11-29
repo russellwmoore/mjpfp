@@ -6,6 +6,7 @@ import {
     setDate,
     setTasks
 } from '../redux/actions';
+import NavBar from './components/NavBar';
 import { connect } from 'react-redux';
 
 class App extends React.Component {
@@ -22,6 +23,7 @@ class App extends React.Component {
         if ( date ) {
             return (
                 <div id="app">
+                    <NavBar />
                     <CalendarView />
                 </div>
             )

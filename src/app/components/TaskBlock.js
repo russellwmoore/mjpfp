@@ -31,8 +31,8 @@ class TaskBlock extends React.Component {
         const { task } = this.props;
         return (
             <div className="taskblock">
-                <button onClick={ev => this.handleSooner(ev)}>{`<`}</button>
-                <button onClick={ev => this.handleLater(ev)}>{`>`}</button>
+                <button onClick={ev => this.handleSooner(ev)} disabled={task.complete}>{`<`}</button>
+                <button onClick={ev => this.handleLater(ev)} disabled={task.complete}>{`>`}</button>
                 <input
                 type="checkbox"
                 name="complete"
