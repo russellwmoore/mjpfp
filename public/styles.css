@@ -1,29 +1,47 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    display: block;
+    overflow: auto;
+}
+.calHeader {
+    font-size: 14px;
+    font-weight: bold;
+    color: grey;
+}
 .cal-container {
     display: grid;
-    grid-template-columns: repeat(7, auto);
-    grid-template-rows: repeat(6, auto);
+    grid-template-columns: repeat(7, calc(100vw / 7));
+    grid-template-rows: [h-start] 40px [h-end] repeat(4, 1fr);
     justify-items: stretch;
     align-items: stretch;
-
 }
 
-.header-row {
+.date-tile {
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    flex-basis: 2rem;
-    font-weight: bold;
-}
-
-.month-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    flex-basis: 3rem;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: stretch;
+    padding: 0 0.5rem;
 }
 
 .tile {
-    display: inline-block;
+    border: 1px solid grey;
     text-align: center;
-    flex-basis: 2rem;
+    align-self: stretch;
+}
+
+.taskblock {
+    display: block;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.completed-task {
+    text-decoration: line-through;
+    text-align: left;
 }

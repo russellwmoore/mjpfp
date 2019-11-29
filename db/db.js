@@ -32,25 +32,7 @@ const Task = sequelize.define('task', {
     }
 });
 
-const TaskDate = sequelize.define('taskdate', {
-    id: {
-        type: Sequelize.UUID,
-        primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
-        allowNull: false,
-    },
-    date: {
-        type: Sequelize.DATEONLY,
-        allowNull: false,
-    }
-});
-
-// Task.belongsTo(TaskDate);
-// TaskDate.hasMany(Task);
-
-
 module.exports = {
     sequelize,
-    Task,
-   // TaskDate
+    Task
 }

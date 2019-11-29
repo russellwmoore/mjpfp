@@ -58178,19 +58178,16 @@ class CalendarView extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       id: "calendar-view",
       className: "cal-container"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "header-row"
     }, _constants__WEBPACK_IMPORTED_MODULE_4__["weekdays"].map(day => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      key: day.slice(0, 3)
-    }, day))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "cal-body"
-    }, monthArr.map(week => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      key: week,
-      className: "month-row"
-    }, week.map(day => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DateTile__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      key: day.slice(0, 3),
+      className: "tile calHeader"
+    }, day)), monthArr.map(week => week.map(day => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "tile",
+      key: `${week}-${Math.random() * 30}`
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DateTile__WEBPACK_IMPORTED_MODULE_2__["default"], {
       key: `${week}-${Math.random() * 30}`,
       tileDate: day || ''
-    }))))));
+    })))));
   }
 
 }
@@ -58222,11 +58219,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _TaskBlock__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TaskBlock */ "./src/app/components/TaskBlock.js");
+/* harmony import */ var _redux_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../redux/actions */ "./src/redux/actions.js");
+
+
+
 
 
 
 
 class DateTile extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  constructor() {
+    super();
+    this.state = {
+      newTask: ''
+    };
+  }
+
+  async handleClick() {
+    await axios__WEBPACK_IMPORTED_MODULE_3___default.a.post(`/api/tasks/`, {
+      description: this.state.newTask,
+      date: this.props.tileDate
+    });
+    const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/tasks/${this.props.date.getFullYear()}/${this.props.date.getMonth()}`)).data;
+    this.props.setTasks(updatedTasks);
+    this.setState({
+      newTask: ''
+    });
+  }
+
   render() {
     let dayTasks = [];
     const {
@@ -58239,25 +58262,143 @@ class DateTile extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       dayTasks = taskList.filter(task => moment__WEBPACK_IMPORTED_MODULE_2___default()(task.date).isSame(tileDate, 'day'));
     }
 
+    if (tileDate) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "date-tile"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, tileLabel), dayTasks.map(task => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_TaskBlock__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        key: task.id,
+        task: task
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        value: this.state.newTask,
+        className: "new-input",
+        onChange: ev => this.setState({
+          newTask: ev.target.value
+        })
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: () => this.handleClick()
+      }, "+")));
+    }
+
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "tile"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, tileLabel), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, dayTasks.map(task => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-      key: task.id
-    }, task.description))));
+      className: "date-tile"
+    });
   }
 
 }
 
 function mapStateToProps(state) {
   const {
+    tasks,
+    calendar
+  } = state;
+  return {
+    taskList: tasks.taskList,
+    date: calendar.date
+  };
+}
+
+const mapDispatchToProps = {
+  setTasks: taskList => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_5__["setTasks"])(taskList)
+};
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(DateTile));
+
+/***/ }),
+
+/***/ "./src/app/components/TaskBlock.js":
+/*!*****************************************!*\
+  !*** ./src/app/components/TaskBlock.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _redux_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../redux/actions */ "./src/redux/actions.js");
+
+
+
+
+
+
+class TaskBlock extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  async handleChange(ev) {
+    await axios__WEBPACK_IMPORTED_MODULE_3___default.a.put(`/api/tasks/${this.props.task.id}`, {
+      complete: ev.target.checked
+    });
+    const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/tasks/${this.props.date.getFullYear()}/${this.props.date.getMonth()}`)).data;
+    this.props.setTasks(updatedTasks);
+  }
+
+  async handleSooner(ev) {
+    ev.preventDefault();
+    const {
+      date
+    } = this.props.task;
+    await axios__WEBPACK_IMPORTED_MODULE_3___default.a.put(`/api/tasks/${this.props.task.id}`, {
+      date: moment__WEBPACK_IMPORTED_MODULE_2___default()(date).subtract(1, 'days').toDate()
+    });
+    const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/tasks/${this.props.date.getFullYear()}/${this.props.date.getMonth()}`)).data;
+    this.props.setTasks(updatedTasks);
+  }
+
+  async handleLater(ev) {
+    ev.preventDefault();
+    const {
+      date
+    } = this.props.task;
+    await axios__WEBPACK_IMPORTED_MODULE_3___default.a.put(`/api/tasks/${this.props.task.id}`, {
+      date: moment__WEBPACK_IMPORTED_MODULE_2___default()(date).add(1, 'days').toDate()
+    });
+    const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/tasks/${this.props.date.getFullYear()}/${this.props.date.getMonth()}`)).data;
+    this.props.setTasks(updatedTasks);
+  }
+
+  render() {
+    const {
+      task
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "taskblock"
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      onClick: ev => this.handleSooner(ev)
+    }, `<`), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      onClick: ev => this.handleLater(ev)
+    }, `>`), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      type: "checkbox",
+      name: "complete",
+      value: "true",
+      defaultChecked: task.complete,
+      onChange: ev => this.handleChange(ev)
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: task.complete ? "completed-task" : "active-task"
+    }, task.description));
+  }
+
+}
+
+function mapStateToProps(state) {
+  const {
+    calendar,
     tasks
   } = state;
   return {
+    date: calendar.date,
     taskList: tasks.taskList
   };
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps)(DateTile));
+const mapDispatchToProps = {
+  setTasks: taskList => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_4__["setTasks"])(taskList)
+};
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(TaskBlock));
 
 /***/ }),
 

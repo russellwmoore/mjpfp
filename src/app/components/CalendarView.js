@@ -29,22 +29,15 @@ class CalendarView extends React.Component {
         const monthArr = this.buildDates();
         return (
             <div id="calendar-view" className="cal-container">
-
-                    <div className="header-row">
-
-                            {
-                                weekdays.map(day => <div key={day.slice(0, 3)}>{day}</div>)
-                            }
-
-                    </div>
-                    <div className="cal-body">
-                        {
-                            monthArr.map(week =>
-                                <div key={week} className="month-row">
-                                    {week.map(day => <DateTile key={`${week}-${Math.random() * 30}`} tileDate={day || ''} />)}
-                                </div>)
-                        }
-                    </div>
+                {
+                    weekdays.map(day => <div key={day.slice(0, 3)} className="tile calHeader">{day}</div>)
+                }
+                {
+                    monthArr.map(week => week.map(day =>
+                        <div className="tile" key={`${week}-${Math.random() * 30}`}>
+                            <DateTile key={`${week}-${Math.random() * 30}`} tileDate={day || ''} />
+                        </div>))
+                }
 
             </div>
         )
