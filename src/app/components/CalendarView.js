@@ -1,20 +1,25 @@
+/* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import moment from 'moment';
+import DateTile from './DateTile';
 import { connect } from 'react-redux';
 import { weekdays, monthWeeks } from '../constants';
 
 
 class CalendarView extends React.Component {
 
+    //I'm choosing to build the dates array on the Calendar view instead of the App because the App
+    //is subscribed to task state and will update everytime that changes as well
     buildDates() {
-        const selectedYear = this.props.year;
-        const selectedMonth = moment().year(selectedYear).month(this.props.month);
-        const daysInMonth = selectedMonth.daysInMonth();
+        const wrappedDate = moment(this.props.date);
+        const daysInMonth = moment(this.props.date).daysInMonth();
         let monthArr = monthWeeks;
         let wk = 0;
         for (let i = 1; i <= daysInMonth; i++) {
-            const wkday = selectedMonth.date(i).day();
-            monthArr[wk][wkday] = i;
+            const monthday = moment(this.props.date).date(i);
+            const wkday = monthday.day();
+            //console.log(wrappedDate.date(i));
+            monthArr[wk][wkday] = monthday;
             if (wkday === 6) {
                 ++wk;
             }
@@ -25,21 +30,24 @@ class CalendarView extends React.Component {
     render() {
         const monthArr = this.buildDates();
         return (
-            <div id="calendar-container">
-                <table>
-                    <thead>
-                        <tr>
+            <div id="calendar-view" className="cal-container">
+
+                    <div className="header-row">
+
                             {
-                                weekdays.map(day => <th key={day.slice(0, 3)}>{day}</th>)
+                                weekdays.map(day => <div key={day.slice(0, 3)}>{day}</div>)
                             }
-                        </tr>
-                    </thead>
-                    <tbody>
+
+                    </div>
+                    <div className="cal-body">
                         {
-                            monthArr.map(week => <tr key={week}>{week.map((day, idx) => <td key={`${week}-${idx}-${day}`}>{day || ''}</td>)}</tr>)
+                            monthArr.map(week =>
+                                <div key={week} className="month-row">
+                                    {week.map((day, idx) => <DateTile dateLabel={day || ''} />)}
+                                </div>)
                         }
-                    </tbody>
-                </table>
+                    </div>
+
             </div>
         )
     }
@@ -48,8 +56,7 @@ class CalendarView extends React.Component {
 function mapStateToProps(state) {
     const { calendar } = state;
     return {
-        year: calendar.year,
-        month: calendar.month,
+        date: calendar.date,
     }
 }
 

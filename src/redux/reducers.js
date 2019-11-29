@@ -1,30 +1,25 @@
 import { combineReducers } from 'redux';
 import {
     SET_TASKS,
-    SET_MONTH,
-    SET_YEAR,
+    SET_DATE,
     SELECT_DAY,
     CLEAR_SELECTION,
 } from './actions'
 
 
 const initCalendarState = {
-    year: 0,
-    month: 0,
+    date: 0,
     selected: null,
-    datesArr: [],
 }
 
 const initTasksState = {
-    tasks: [],
+    taskList: [],
 }
 
 function calendarReducer(state = initCalendarState, action) {
     switch (action.type) {
-        case SET_MONTH:
-            return {...state, month: action.payload.month};
-        case SET_YEAR:
-            return {...state, year: action.payload.year};
+        case SET_DATE:
+            return {...state, date: action.payload.date};
         case SELECT_DAY:
             return {...state, selected: action.payload.selected};
         case CLEAR_SELECTION:
@@ -38,7 +33,7 @@ function calendarReducer(state = initCalendarState, action) {
 function tasksReducer(state = initTasksState, action) {
     switch (action.type) {
         case SET_TASKS:
-            return {...state, tasks: action.payload.tasks};
+            return {...state, taskList: action.payload.taskList};
         default:
             return state;
     }

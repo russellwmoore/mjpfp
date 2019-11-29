@@ -1,0 +1,27 @@
+.cal-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+}
+
+.header-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-basis: 2rem;
+    font-weight: bold;
+}
+
+.month-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-basis: 3rem;
+}
+
+.tile {
+    display: inline-block;
+    text-align: center;
+    flex-basis: 2rem;
+}

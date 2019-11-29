@@ -1,21 +1,25 @@
 import React from 'react';
+import moment from 'moment';
+import axios from 'axios';
 import CalendarView from './components/CalendarView';
 import {
-    setMonth,
-    setYear
+    setDate,
+    setTasks
 } from '../redux/actions';
 import { connect } from 'react-redux';
 
 class App extends React.Component {
 
-    componentDidMount() {
-        this.props.setYear(2019);
-        this.props.setMonth("December");
+    async componentDidMount() {
+        const initDate = new Date();
+        this.props.setDate(initDate);
+        const monthTasks = (await axios.get(`/api/tasks/${initDate.getFullYear()}/${initDate.getMonth()}`)).data;
+        this.props.setTasks(monthTasks);
     }
 
     render() {
-        const { year, month} = this.props;
-        if ( month && year) {
+        const { date } = this.props;
+        if ( date ) {
             return (
                 <div id="app">
                     <CalendarView />
@@ -35,14 +39,13 @@ class App extends React.Component {
 function mapStateToProps(state) {
     const { calendar } = state;
     return {
-        year: calendar.year,
-        month: calendar.month,
+        date: calendar.date,
     }
 }
 
 const mapDispatchToProps = {
-    setMonth: (month) => setMonth(month),
-    setYear: (year) => setYear(year)
+    setDate: (date) => setDate(date),
+    setTasks: (taskList) => setTasks(taskList),
 }
 
 export default connect(

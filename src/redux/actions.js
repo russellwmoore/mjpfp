@@ -1,34 +1,23 @@
 export const SET_TASKS = 'SET_TASKS';
-export const SET_MONTH = 'SET_MONTH';
-export const SET_YEAR = 'SET_YEAR';
 export const SELECT_DAY = 'SELECT_DAY';
 export const CLEAR_SELECTION = 'CLEAR_SELECTION';
-export const SET_DATES_ARRAY = 'SET_DATES_ARRAY';
+export const SET_DATE = 'SET_DATE';
 
 
-export function setTasks(tasks) {
+export function setTasks(taskList) {
     return {
         type: SET_TASKS,
         payload: {
-            tasks,
+            taskList,
         }
     }
 }
 
-export function setMonth(month) {
+export function setDate(date) {
     return {
-        type: SET_MONTH,
+        type: SET_DATE,
         payload: {
-            month,
-        }
-    }
-}
-
-export function setYear(year) {
-    return {
-        type: SET_YEAR,
-        payload: {
-            year,
+            date,
         }
     }
 }
