@@ -58156,15 +58156,13 @@ class CalendarView extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
   //I'm choosing to build the dates array on the Calendar view instead of the App because the App
   //is subscribed to task state and will update everytime that changes as well
   buildDates() {
-    const wrappedDate = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.props.date);
     const daysInMonth = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.props.date).daysInMonth();
     let monthArr = _constants__WEBPACK_IMPORTED_MODULE_4__["monthWeeks"];
     let wk = 0;
 
     for (let i = 1; i <= daysInMonth; i++) {
       const monthday = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.props.date).date(i);
-      const wkday = monthday.day(); //console.log(wrappedDate.date(i));
-
+      const wkday = monthday.day();
       monthArr[wk][wkday] = monthday;
 
       if (wkday === 6) {
@@ -58189,8 +58187,9 @@ class CalendarView extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
     }, monthArr.map(week => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: week,
       className: "month-row"
-    }, week.map((day, idx) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DateTile__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      dateLabel: day || ''
+    }, week.map(day => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DateTile__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      key: `${week}-${Math.random() * 30}`,
+      tileDate: day || ''
     }))))));
   }
 
@@ -58229,25 +58228,22 @@ __webpack_require__.r(__webpack_exports__);
 
 class DateTile extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   render() {
-    let tileLabel = '';
-    let dayTaskList = [];
+    let dayTasks = [];
     const {
-      dateLabel,
+      tileDate,
       taskList
     } = this.props;
-
-    if (dateLabel) {
-      tileLabel = dateLabel.date();
-    }
+    const tileLabel = tileDate ? tileDate.date() : '';
 
     if (taskList.length) {
-      let tasks = taskList.find(day => moment__WEBPACK_IMPORTED_MODULE_2___default()(day.date).isSame(dateLabel, 'day'));
-      console.log(tasks);
+      dayTasks = taskList.filter(task => moment__WEBPACK_IMPORTED_MODULE_2___default()(task.date).isSame(tileDate, 'day'));
     }
 
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "tile"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, tileLabel), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null));
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, tileLabel), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, dayTasks.map(task => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      key: task.id
+    }, task.description))));
   }
 
 }

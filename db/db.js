@@ -21,6 +21,10 @@ const Task = sequelize.define('task', {
     description: {
         type: Sequelize.STRING,
     },
+    date: {
+        type: Sequelize.DATEONLY,
+        allowNull: false,
+    },
     type: {
         type: Sequelize.STRING,
         defaultValue: 'task',
@@ -41,12 +45,12 @@ const TaskDate = sequelize.define('taskdate', {
     }
 });
 
-Task.belongsTo(TaskDate);
-TaskDate.hasMany(Task);
+// Task.belongsTo(TaskDate);
+// TaskDate.hasMany(Task);
 
 
 module.exports = {
     sequelize,
     Task,
-    TaskDate
+   // TaskDate
 }

@@ -26,7 +26,7 @@ server.get('/api/tasks/:year/:month/:date?', async(req, res, next) => {
     let { year, month, date } = req.params;
     let response = '';
     if (date) {
-        response = await TaskDate.findAll({
+        response = await Task.findAll({
             where: {
                 date: {
                     [Op.between]: [
@@ -35,11 +35,10 @@ server.get('/api/tasks/:year/:month/:date?', async(req, res, next) => {
                     ],
                 }
             },
-            include: [Task],
         });
     }
     else {
-        response = await TaskDate.findAll({
+        response = await Task.findAll({
             where: {
                 date: {
                     [Op.between]: [
@@ -48,7 +47,6 @@ server.get('/api/tasks/:year/:month/:date?', async(req, res, next) => {
                     ],
                 }
             },
-            include: [Task],
         });
     }
     res.status(200).send(response);

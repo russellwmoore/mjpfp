@@ -11,14 +11,12 @@ class CalendarView extends React.Component {
     //I'm choosing to build the dates array on the Calendar view instead of the App because the App
     //is subscribed to task state and will update everytime that changes as well
     buildDates() {
-        const wrappedDate = moment(this.props.date);
         const daysInMonth = moment(this.props.date).daysInMonth();
         let monthArr = monthWeeks;
         let wk = 0;
         for (let i = 1; i <= daysInMonth; i++) {
             const monthday = moment(this.props.date).date(i);
             const wkday = monthday.day();
-            //console.log(wrappedDate.date(i));
             monthArr[wk][wkday] = monthday;
             if (wkday === 6) {
                 ++wk;
@@ -43,7 +41,7 @@ class CalendarView extends React.Component {
                         {
                             monthArr.map(week =>
                                 <div key={week} className="month-row">
-                                    {week.map((day, idx) => <DateTile dateLabel={day || ''} />)}
+                                    {week.map(day => <DateTile key={`${week}-${Math.random() * 30}`} tileDate={day || ''} />)}
                                 </div>)
                         }
                     </div>

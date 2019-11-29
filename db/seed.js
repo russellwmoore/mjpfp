@@ -12,10 +12,9 @@ const seedData = async function() {
     for (let i = 0; i < TASKS_NUMBER; i++) {
         dates.push(new Date(2019, 11, (20 + i)));
     }
-    const dateFields = await Promise.all(dates.map(d => TaskDate.create({ date: d })));
-    const taskFields = await Promise.all(dateFields.map(date => Task.create({
+    const TaskFields = await Promise.all(dates.map(d => Task.create({
         description: randomString(),
-        taskdateId: date.id,
+        date: d,
     })));
 }
 

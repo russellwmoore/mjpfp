@@ -5,15 +5,12 @@ import moment from 'moment';
 class DateTile extends React.Component {
 
     render() {
-        let tileLabel = '';
-        let dayTaskList = [];
-        const { dateLabel, taskList} = this.props;
-        if (dateLabel) {
-            tileLabel = dateLabel.date();
-        }
+        let dayTasks = [];
+        const { tileDate, taskList} = this.props;
+        const tileLabel = tileDate ? tileDate.date() : '';
+
         if (taskList.length) {
-            let tasks = taskList.find(day => moment(day.date).isSame(dateLabel, 'day'));
-            console.log(tasks);
+            dayTasks = taskList.filter(task => moment(task.date).isSame(tileDate, 'day'));
         }
 
         return (
@@ -21,7 +18,7 @@ class DateTile extends React.Component {
                 <p>{tileLabel}</p>
                 <ul>
                     {
-                        
+                        dayTasks.map(task => <li key={task.id}>{task.description}</li>)
                     }
                 </ul>
             </div>
