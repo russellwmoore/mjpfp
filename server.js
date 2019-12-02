@@ -80,7 +80,7 @@ server.put('/api/tasks/:id', async(req, res, next) => {
 sequelize.sync({ force: true })
     .then(() => {
     console.log('db sync successful');
-    return seedData();
+    //return seedData();
     })
     .then(() => {
         server.listen(PORT, () => {

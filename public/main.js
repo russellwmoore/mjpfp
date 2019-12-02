@@ -58159,7 +58159,15 @@ class CalendarView extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
   //is subscribed to task state and will update everytime that changes as well
   buildDates() {
     const daysInMonth = moment__WEBPACK_IMPORTED_MODULE_1___default()(this.props.date).daysInMonth();
-    let monthArr = _constants__WEBPACK_IMPORTED_MODULE_4__["monthWeeks"];
+
+    let _tmp = Array(5);
+
+    for (let i = 0; i < 5; i++) {
+      let wk = Array(7).fill(null);
+      _tmp[i] = wk;
+    }
+
+    let monthArr = _tmp;
     let wk = 0;
 
     for (let i = 1; i <= daysInMonth; i++) {
@@ -58516,7 +58524,7 @@ for (let i = 0; i < 5; i++) {
   _tmp[i] = wk;
 }
 
-const monthWeeks = _tmp;
+let monthWeeks = _tmp;
 
 
 /***/ }),

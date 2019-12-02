@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import DateTile from './DateTile';
 import { connect } from 'react-redux';
-import { weekdays, monthWeeks } from '../constants';
+import { weekdays } from '../constants';
 
 
 class CalendarView extends React.Component {
@@ -12,7 +12,12 @@ class CalendarView extends React.Component {
     //is subscribed to task state and will update everytime that changes as well
     buildDates() {
         const daysInMonth = moment(this.props.date).daysInMonth();
-        let monthArr = monthWeeks;
+        let _tmp = Array(5);
+        for (let i = 0; i < 5; i++) {
+            let wk = Array(7).fill(null);
+            _tmp[i] = wk;
+        }
+        let monthArr = _tmp;
         let wk = 0;
         for (let i = 1; i <= daysInMonth; i++) {
             const monthday = moment(this.props.date).date(i);
