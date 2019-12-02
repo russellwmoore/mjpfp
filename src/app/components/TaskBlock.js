@@ -31,16 +31,19 @@ class TaskBlock extends React.Component {
         const { task } = this.props;
         return (
             <div className="taskblock">
+            <div className="inputs-block">
                 <button onClick={ev => this.handleSooner(ev)} disabled={task.complete}>{`<`}</button>
                 <button onClick={ev => this.handleLater(ev)} disabled={task.complete}>{`>`}</button>
+            </div>
                 <input
-                type="checkbox"
-                name="complete"
-                value="true"
-                defaultChecked={task.complete}
-                onChange={(ev) => this.handleChange(ev)}
+                    type="checkbox"
+                    name="complete"
+                    value="true"
+                    defaultChecked={task.complete}
+                    onChange={(ev) => this.handleChange(ev)}
                 />
                 <span className={task.complete ? "completed-task" : "active-task"}>{task.description}</span>
+
             </div>
         )
     }

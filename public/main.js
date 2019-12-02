@@ -58236,8 +58236,10 @@ class DateTile extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   constructor() {
     super();
     this.state = {
-      newTask: ''
+      newTask: '',
+      isHovering: false
     };
+    this.handleHover = this.handleHover.bind(this);
   }
 
   async handleClick() {
@@ -58249,6 +58251,13 @@ class DateTile extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     this.props.setTasks(updatedTasks);
     this.setState({
       newTask: ''
+    });
+  }
+
+  handleHover() {
+    const toggleHover = this.state.isHovering;
+    this.setState({
+      isHovering: !toggleHover
     });
   }
 
@@ -58266,21 +58275,25 @@ class DateTile extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
 
     if (tileDate) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "date-tile"
+        className: "date-tile",
+        onMouseEnter: () => this.handleHover(),
+        onMouseLeave: () => this.handleHover()
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, tileLabel), dayTasks.map(task => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_TaskBlock__WEBPACK_IMPORTED_MODULE_4__["default"], {
         key: task.id,
         task: task
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      })), (this.state.isHovering || this.state.newTask) && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "newtask-block"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
         value: this.state.newTask,
-        className: "new-input",
         onChange: ev => this.setState({
           newTask: ev.target.value
         })
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         onClick: () => this.handleClick()
-      }, "+")));
-    }
+      }, "Add New Task")));
+    } //no date
+
 
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "date-tile"
@@ -58331,10 +58344,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class NavBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  async handleSooner(ev) {
+    ev.preventDefault();
+    const {
+      date
+    } = this.props;
+    const newDate = moment__WEBPACK_IMPORTED_MODULE_1___default()(date).subtract(1, 'months').toDate();
+    this.props.setDate(newDate);
+    const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(`/api/tasks/${newDate.getFullYear()}/${newDate.getMonth()}`)).data;
+    this.props.setTasks(updatedTasks);
+  }
+
+  async handleLater(ev) {
+    ev.preventDefault();
+    const {
+      date
+    } = this.props;
+    const newDate = moment__WEBPACK_IMPORTED_MODULE_1___default()(date).add(1, 'months').toDate();
+    this.props.setDate(newDate);
+    const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(`/api/tasks/${newDate.getFullYear()}/${newDate.getMonth()}`)).data;
+    this.props.setTasks(updatedTasks);
+  }
+
   render() {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "navbar"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, moment__WEBPACK_IMPORTED_MODULE_1___default()(this.props.date).format("MMMM YYYY")));
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      onClick: ev => this.handleSooner(ev)
+    }, `<`), moment__WEBPACK_IMPORTED_MODULE_1___default()(this.props.date).format("MMMM YYYY"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      onClick: ev => this.handleLater(ev)
+    }, `>`));
   }
 
 }
@@ -58349,7 +58388,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  setDate: date => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_3__["setDate"])(date)
+  setDate: date => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_3__["setDate"])(date),
+  setTasks: taskList => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_3__["setTasks"])(taskList)
 };
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["connect"])(mapStateToProps, mapDispatchToProps)(NavBar));
 
@@ -58417,13 +58457,15 @@ class TaskBlock extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     } = this.props;
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "taskblock"
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "inputs-block"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       onClick: ev => this.handleSooner(ev),
       disabled: task.complete
     }, `<`), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       onClick: ev => this.handleLater(ev),
       disabled: task.complete
-    }, `>`), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    }, `>`)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
       type: "checkbox",
       name: "complete",
       value: "true",

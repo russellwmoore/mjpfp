@@ -11,13 +11,20 @@ class DateTile extends React.Component {
         super();
         this.state = {
             newTask: '',
+            isHovering: false,
         }
+        this.handleHover = this.handleHover.bind(this);
     }
     async handleClick() {
         await axios.post(`/api/tasks/`, { description: this.state.newTask, date: this.props.tileDate });
         const updatedTasks = (await axios.get(`/api/tasks/${this.props.date.getFullYear()}/${this.props.date.getMonth()}`)).data;
         this.props.setTasks(updatedTasks);
         this.setState({ newTask: '' });
+    }
+
+    handleHover() {
+        const toggleHover = this.state.isHovering;
+        this.setState({ isHovering: !toggleHover })
     }
 
     render() {
@@ -30,24 +37,34 @@ class DateTile extends React.Component {
         }
 
         if (tileDate) {
+
             return (
-                <div className="date-tile">
+                <div
+                className="date-tile"
+                onMouseEnter={() => this.handleHover()}
+                onMouseLeave={() => this.handleHover()}
+                >
                     <h4>{tileLabel}</h4>
                     {
                         dayTasks.map(task => <TaskBlock key={task.id} task={task} />)
                     }
-                    <div>
-                        <input
-                        type="text"
-                        value={this.state.newTask}
-                        className="new-input"
-                        onChange={(ev) => this.setState({ newTask: ev.target.value })}
-                        />
-                        <button onClick={() => this.handleClick()}>+</button>
-                    </div>
+                    {
+                        (this.state.isHovering || this.state.newTask) &&
+                        <div className="newtask-block">
+                            <input
+                            type="text"
+                            value={this.state.newTask}
+                            onChange={(ev) => this.setState({ newTask: ev.target.value })}
+                            />
+                            <button onClick={() => this.handleClick()}>Add New Task</button>
+                        </div>
+                    }
+
                 </div>
             )
         }
+
+        //no date
         return (
             <div className="date-tile">
             </div>
