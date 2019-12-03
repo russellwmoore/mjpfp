@@ -58123,9 +58123,19 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = {
+const _mapDispatchToProps = {
   setDate: date => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_4__["setDate"])(date),
   setTasks: taskList => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_4__["setTasks"])(taskList)
+}; // a shortcut for this mapDispatch => Since the function you are defining in the object has the exact same arguments as the action creator you can simplify like this:
+
+const verboseMapDispatchToProps = {
+  setDate: _redux_actions__WEBPACK_IMPORTED_MODULE_4__["setDate"],
+  setTasks: _redux_actions__WEBPACK_IMPORTED_MODULE_4__["setTasks"]
+}; //And since you are using the same funciton names as the action creator you can go further
+
+const mapDispatchToProps = {
+  setDate: _redux_actions__WEBPACK_IMPORTED_MODULE_4__["setDate"],
+  setTasks: _redux_actions__WEBPACK_IMPORTED_MODULE_4__["setTasks"]
 };
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProps, mapDispatchToProps)(App));
 
@@ -58196,7 +58206,7 @@ class CalendarView extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
       key: `${week}-${Math.random() * 30}`
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DateTile__WEBPACK_IMPORTED_MODULE_2__["default"], {
       key: `${week}-${Math.random() * 30}`,
-      tileDate: day || ''
+      tileDate: day || ""
     })))));
   }
 
@@ -58244,11 +58254,12 @@ class DateTile extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   constructor() {
     super();
     this.state = {
-      newTask: '',
+      newTask: "",
       isHovering: false
     };
     this.handleHover = this.handleHover.bind(this);
-  }
+  } //You'll love getting thunks happening here! After you move this async logic out of this component this code will read a lot quicker.
+
 
   async handleClick() {
     await axios__WEBPACK_IMPORTED_MODULE_3___default.a.post(`/api/tasks/`, {
@@ -58258,7 +58269,7 @@ class DateTile extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/tasks/${this.props.date.getFullYear()}/${this.props.date.getMonth()}`)).data;
     this.props.setTasks(updatedTasks);
     this.setState({
-      newTask: ''
+      newTask: ""
     });
   }
 
@@ -58275,10 +58286,10 @@ class DateTile extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       tileDate,
       taskList
     } = this.props;
-    const tileLabel = tileDate ? tileDate.date() : '';
+    const tileLabel = tileDate ? tileDate.date() : "";
 
     if (taskList.length) {
-      dayTasks = taskList.filter(task => moment__WEBPACK_IMPORTED_MODULE_2___default()(task.date).isSame(tileDate, 'day'));
+      dayTasks = taskList.filter(task => moment__WEBPACK_IMPORTED_MODULE_2___default()(task.date).isSame(tileDate, "day"));
     }
 
     if (tileDate) {
@@ -58353,22 +58364,22 @@ __webpack_require__.r(__webpack_exports__);
 
 class NavBar extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   async handleSooner(ev) {
-    ev.preventDefault();
+    // ev.preventDefault(); Not needed! Not in a form
     const {
       date
     } = this.props;
-    const newDate = moment__WEBPACK_IMPORTED_MODULE_1___default()(date).subtract(1, 'months').toDate();
+    const newDate = moment__WEBPACK_IMPORTED_MODULE_1___default()(date).subtract(1, "months").toDate();
     this.props.setDate(newDate);
     const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(`/api/tasks/${newDate.getFullYear()}/${newDate.getMonth()}`)).data;
     this.props.setTasks(updatedTasks);
   }
 
   async handleLater(ev) {
-    ev.preventDefault();
+    // ev.preventDefault();
     const {
       date
     } = this.props;
-    const newDate = moment__WEBPACK_IMPORTED_MODULE_1___default()(date).add(1, 'months').toDate();
+    const newDate = moment__WEBPACK_IMPORTED_MODULE_1___default()(date).add(1, "months").toDate();
     this.props.setDate(newDate);
     const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(`/api/tasks/${newDate.getFullYear()}/${newDate.getMonth()}`)).data;
     this.props.setTasks(updatedTasks);
@@ -58393,8 +58404,13 @@ function mapStateToProps(state) {
   return {
     date: calendar.date
   };
-}
+} // can also be
 
+
+const _mapDispatchToProps = {
+  setDate: _redux_actions__WEBPACK_IMPORTED_MODULE_3__["setDate"],
+  setTasks: _redux_actions__WEBPACK_IMPORTED_MODULE_3__["setTasks"]
+};
 const mapDispatchToProps = {
   setDate: date => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_3__["setDate"])(date),
   setTasks: taskList => Object(_redux_actions__WEBPACK_IMPORTED_MODULE_3__["setTasks"])(taskList)
@@ -58436,24 +58452,26 @@ class TaskBlock extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   }
 
   async handleSooner(ev) {
-    ev.preventDefault();
+    // ev.preventDefault(); // Don't need these! preventing default behavior is only needed on buttons that are in forms.
+    console.log("ev", ev.target.innerText); // You could also grab the innerText to give you a < or a > to dry up these 2 handle functions
+
     const {
       date
     } = this.props.task;
     await axios__WEBPACK_IMPORTED_MODULE_3___default.a.put(`/api/tasks/${this.props.task.id}`, {
-      date: moment__WEBPACK_IMPORTED_MODULE_2___default()(date).subtract(1, 'days').toDate()
+      date: moment__WEBPACK_IMPORTED_MODULE_2___default()(date).subtract(1, "days").toDate()
     });
     const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/tasks/${this.props.date.getFullYear()}/${this.props.date.getMonth()}`)).data;
     this.props.setTasks(updatedTasks);
   }
 
   async handleLater(ev) {
-    ev.preventDefault();
+    // ev.preventDefault();
     const {
       date
     } = this.props.task;
     await axios__WEBPACK_IMPORTED_MODULE_3___default.a.put(`/api/tasks/${this.props.task.id}`, {
-      date: moment__WEBPACK_IMPORTED_MODULE_2___default()(date).add(1, 'days').toDate()
+      date: moment__WEBPACK_IMPORTED_MODULE_2___default()(date).add(1, "days").toDate()
     });
     const updatedTasks = (await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/tasks/${this.props.date.getFullYear()}/${this.props.date.getMonth()}`)).data;
     this.props.setTasks(updatedTasks);
@@ -58552,7 +58570,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const root = document.querySelector('#root');
+const root = document.querySelector("#root"); // Cool to see the React/Redux setup!
 
 const Root = () => {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_3__["Provider"], {
@@ -58676,7 +58694,7 @@ function tasksReducer(state = initTasksState, action) {
 /* harmony default export */ __webpack_exports__["default"] = (Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
   tasks: tasksReducer,
   calendar: calendarReducer
-}));
+})); // great combine reducers!
 
 /***/ }),
 
@@ -58695,6 +58713,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./reducers */ "./src/redux/reducers.js");
 
 
+ // Logger is super useful! I like to set this up so it only runs if I'm currently in a dev environment. if(NODE_ENV=development) do logger.
+// I will also usually
 
 const store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers__WEBPACK_IMPORTED_MODULE_2__["default"], Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_logger__WEBPACK_IMPORTED_MODULE_1___default.a));
 /* harmony default export */ __webpack_exports__["default"] = (store);
